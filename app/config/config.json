@@ -2,8 +2,8 @@
 	"development" : {
 		"email_verfication_time" : 1,
 		"salt" : "Guess_if_you_can",
-		"smtp_username" : "magarwal516",
-		"smtp_password" : "Myheartgoesmad9920949629",
+		"smtp_username" : "eventohub",
+		"smtp_password" : "Eventohub@15",
 		"smtp_host" : "smtp.gmail.com",
 		"eventohub_config" : {
 			"host" : "web.eventohub.com",
