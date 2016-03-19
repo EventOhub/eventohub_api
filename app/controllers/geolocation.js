@@ -1,41 +1,28 @@
 var async = require('async');
 var geolocationModel = require("../models/geolocation.js");
 var appController = require("./appController.js");
+var _ = require('underscore');
 
 var geolocation = {
-	getStates : function(country_id, callback) {
-		geolocationModel.getStates(country_id, function(err, rows){
-			var states = [];
+	getLocation : function(callback) {
+		geolocationModel.getLocation(function(err, rows){
+			var locations = {};
 			if(err) callback(err);
-			async.forEach(rows, function (row, cb){ 
-			    states.push({
-			    	"id" : row['state_id'],
-			    	"name" : row['state']
-			    })
-			    cb(); // tell async that the iterator has completed
-			}, function(err) {
-			    console.log('iterating done');
-			});  
-			appController.responsify(err, states, function(response){
-				callback(null, response);
-			})
-		});
-	},
-
-	getCities : function(state_id, callback) {
-		geolocationModel.getCities(state_id, function(err, rows){
-			var states = [];
-			if(err) callback(err);
-			async.forEach(rows, function (row, cb){ 
-			    states.push({
-			    	"id" : row['city_id'],
-			    	"name" : row['city']
-			    })
-			    cb(); // tell async that the iterator has completed
-			}, function(err) {
-			    console.log('iterating done');
-			});  
-			appController.responsify(err, states, function(response){
+			_.each(rows, function(countries){
+				if(locations[countries['country']] === undefined){
+					locations[countries['country']] = {};
+					locations[countries['country']][countries['state']] = [];
+					locations[countries['country']][countries['state']].push(countries['city']);
+				}else{
+					if(locations[countries['country']][countries['state']] === undefined){
+						locations[countries['country']][countries['state']] = [];
+						locations[countries['country']][countries['state']].push(countries['city']);
+					}else
+						locations[countries['country']][countries['state']].push(countries['city']);
+				}
+				
+			});
+			appController.responsify(err, locations, function(response){
 				callback(null, response);
 			})
 		});
