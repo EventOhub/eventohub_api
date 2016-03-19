@@ -1,0 +1,16 @@
+{
+	"development" : {
+		"email_verfication_time" : 1,
+		"otp_expiry" : 10,
+		"salt" : "Guess_if_you_can",
+		"smtp_username" : "eventohub",
+		"smtp_password" : "Eventohub@15",
+		"smtp_host" : "smtp.gmail.com",
+		"eventohub_config" : {
+			"host" : "web.eventohub.com",
+			"verification_api" : "/verifyemail"
+		},
+		"twilio_account_sid" : "AC10ef7c457ec8104c9a1a37875f4fbd60",
+		"twilio_auth_token" : "a0c43cb2610f50821a32c056d886b996"
+	}
+}
