@@ -62,7 +62,7 @@ var userModel = {
 							});	
 						},
 						function(userId, otpID, cb) {
-							var verificationUUID = uuid.v1() + "-" + data.insertId;
+							var verificationUUID = uuid.v1() + "-" + userId;
 							var verificationData = {
 								"table" : "verification",
 								"values" : {
