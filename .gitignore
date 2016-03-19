@@ -2,6 +2,7 @@
 logs
 *.log
 npm-debug.log*
+app/config/database.json
 
 # Runtime data
 pids
