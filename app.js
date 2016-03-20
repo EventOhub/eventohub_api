@@ -9,6 +9,7 @@ var cors = require('cors')
 var routes = require('./routes/index');
 var geolocation = require('./routes/geolocation');
 var user = require('./routes/user');
+var services = require('./routes/services');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use(cors());
 app.use('/', routes);
 app.use('/geolocation', geolocation);
 app.use('/user', user);
+app.use('/services', services);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
