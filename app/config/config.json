@@ -11,6 +11,9 @@
 			"verification_api" : "/verifyemail"
 		},
 		"twilio_account_sid" : "AC10ef7c457ec8104c9a1a37875f4fbd60",
-		"twilio_auth_token" : "a0c43cb2610f50821a32c056d886b996"
+		"twilio_auth_token" : "a0c43cb2610f50821a32c056d886b996",
+		"city_type" : "a0c43cb",
+		"state_type" : "50821a3",
+		"country_type" : "86b996"
 	}
 }

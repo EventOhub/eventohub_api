@@ -8,21 +8,8 @@ var geolocation = {
 		geolocationModel.getLocation(function(err, rows){
 			var locations = {};
 			if(err) callback(err);
-			_.each(rows, function(countries){
-				if(locations[countries['country']] === undefined){
-					locations[countries['country']] = {};
-					locations[countries['country']][countries['state']] = [];
-					locations[countries['country']][countries['state']].push(countries['city']);
-				}else{
-					if(locations[countries['country']][countries['state']] === undefined){
-						locations[countries['country']][countries['state']] = [];
-						locations[countries['country']][countries['state']].push(countries['city']);
-					}else
-						locations[countries['country']][countries['state']].push(countries['city']);
-				}
-				
-			});
-			appController.responsify(err, locations, function(response){
+		
+			appController.responsify(err, rows, function(response){
 				callback(null, response);
 			})
 		});

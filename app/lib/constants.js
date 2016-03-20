@@ -12,5 +12,8 @@ define({
   SMTP_HOST              : commonConfigFile[env].smtp_host,
   EVENTOHUB_CONFIG       : commonConfigFile[env].eventohub_config,
   TWILIO_ACCOUNT_SID     : commonConfigFile[env].twilio_account_sid,
-  TWILIO_AUTH_TOKEN      : commonConfigFile[env].twilio_auth_token
+  TWILIO_AUTH_TOKEN      : commonConfigFile[env].twilio_auth_token,
+  CITY_TYPE              : commonConfigFile[env].city_type,
+  STATE_TYPE             : commonConfigFile[env].state_type,
+  COUNTRY_TYPE           : commonConfigFile[env].country_type
 });
