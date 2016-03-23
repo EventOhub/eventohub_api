@@ -5,7 +5,7 @@ var appModel = require("../models/appModel.js"),
 
 var servicesModel = {
 	getServices : function(callback) {
-		var qry = "SELECT id, CONCAT(serviceType, '-',service) AS service from services";
+		var qry = "SELECT id, CONCAT(serviceType, '-',service) AS value from services";
 		appModel.query(qry, function(err, data){
 			if(err) callback(err);
 			callback(null, data);
