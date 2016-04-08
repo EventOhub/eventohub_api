@@ -1,8 +1,8 @@
 {
 	"development":{
-		"host" : "localhost",
-		"username" : "root",
-		"password" : "root",
+		"host" : "ec2-52-36-42-96.us-west-2.compute.amazonaws.com",
+		"username" : "shashi",
+		"password" : "shashi",
 		"database" : "eventohub_development"
 	}
 }

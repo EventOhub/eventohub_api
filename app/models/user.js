@@ -13,6 +13,7 @@ var appModel = require("../models/appModel.js"),
 
 var userModel = {
 	createUser : function(params, callback) {
+        console.log(params);
 		var qryData = {
 			"table" : "temp_user",
 			"values" : {
@@ -25,7 +26,7 @@ var userModel = {
                 "emailId"     : params.emailId
 			}
 		}
-		userModel.checkUser(params.username, params.phoneNumber, function(err, data){
+		userModel.checkUser(params.username, params.emailId ,params.phoneNumber, function(err, data){
 			if(err) callback(err);
 			if(data.length > 0){
 				callback(null, "User already exists with this phoneNumber or email")
@@ -76,7 +77,7 @@ var userModel = {
 							appModel.insertQueryBuilder(verificationData,function(err, qry){
 								transaction.query(qry, function(err, data) {
 									if (err) { return cb(err); }
-									userModel.sendEmail(params.username, verificationUUID, function(emailErr, emailResponse){
+									userModel.sendEmail(params.emailId, verificationUUID, function(emailErr, emailResponse){
 										if (err) { return cb(emailErr); }
 										var result = {
 											"insertId" : userId
@@ -103,9 +104,10 @@ var userModel = {
 		});
 	},
 
-	checkUser : function(username, phoneNumber, callback){
+	checkUser : function(username, emailId, phoneNumber, callback){
 		var checkUserQry = "SELECT username from " + table;
-		checkUserQry += " where username = '" + username + "' or phoneNumber = " + phoneNumber; 
+		checkUserQry += " where username = '" + username + "' or phoneNumber = " + phoneNumber + " or emailId = '" + emailId + "'"; 
+        console.log(checkUserQry);
 		appModel.query(checkUserQry, function(err, data){
 			if(err) callback(err);
 			console.log(data);
