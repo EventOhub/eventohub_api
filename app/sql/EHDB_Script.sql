@@ -5,7 +5,7 @@
 -- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- SET FOREIGN_KEY_CHECKS=0;
 
-
+DROP TABLE IF EXISTS `temp_user`;
 DROP TABLE IF EXISTS `verification`;
 DROP TABLE IF EXISTS `bookingDetails`;
 DROP TABLE IF EXISTS `group`;
@@ -115,9 +115,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `userType` VARCHAR(50) DEFAULT NULL,
   `name` VARCHAR(50) DEFAULT NULL,
   `countryCode` TINYINT DEFAULT 0,
-  `phoneNumber` INTEGER(10) DEFAULT 9999999999,
-  `isActive` CHAR(1) DEFAULT 'N',
-  `isVerified` CHAR(1) DEFAULT 'N',
+  `phoneNumber` BIGINT DEFAULT 9999999999,
+  `emailId` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -287,6 +286,26 @@ FOREIGN KEY (otpVerification_id) REFERENCES `otpVerification` (`id`)
 
 
 -- ---
+-- Table 'temp_user'
+-- This table contains the temp user informationwhose verification is pending.
+-- ---
+
+		
+CREATE TABLE IF NOT EXISTS `temp_user` (
+  `id` INTEGER AUTO_INCREMENT DEFAULT NULL,
+  `username` VARCHAR(50) DEFAULT NULL,
+  `password` VARCHAR(50) DEFAULT NULL,
+  `userType` VARCHAR(50) DEFAULT NULL,
+  `name` VARCHAR(50) DEFAULT NULL,
+  `countryCode` TINYINT DEFAULT 0,
+  `phoneNumber` BIGINT DEFAULT 9999999999,
+  `emailId` VARCHAR(255) DEFAULT NULL,
+  `isActive` CHAR(1) DEFAULT 'N',
+  `isVerified` CHAR(1) DEFAULT 'N',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---
 -- Table 'verification'
 -- This table hold the verification information for the first time user coming for registration. The table data can be flushed based on the emailStartTime limit
 -- ---
@@ -300,7 +319,7 @@ CREATE TABLE IF NOT EXISTS `verification` (
   `isPhoneVerified` CHAR(1) DEFAULT 'N',
   `authToken` VARCHAR(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
-FOREIGN KEY (user_id) REFERENCES `user` (`id`),
+FOREIGN KEY (user_id) REFERENCES `temp_user` (`id`),
 FOREIGN KEY (otpVerification_id) REFERENCES `otpVerification` (`id`)
 ) ENGINE=InnoDB;
 

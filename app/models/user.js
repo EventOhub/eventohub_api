@@ -14,14 +14,15 @@ var appModel = require("../models/appModel.js"),
 var userModel = {
 	createUser : function(params, callback) {
 		var qryData = {
-			"table" : "user",
+			"table" : "temp_user",
 			"values" : {
 				"username"    : params.username,
 				"password"    : userModel.getHash(params.password),
 				"userType"    : params.userType,
 				"name"        : params.name,
 				"countryCode" : params.countryCode,
-				"phoneNumber" : params.phoneNumber
+				"phoneNumber" : params.phoneNumber,
+                "emailId"     : params.emailId
 			}
 		}
 		userModel.checkUser(params.username, params.phoneNumber, function(err, data){
