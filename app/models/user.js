@@ -10,7 +10,8 @@ var appModel = require("../models/appModel.js"),
 	moment = require('moment'),
 	transactionModel = require("../models/transactionModel.js"),
 	table  = "user",
-	verificationTableName = 'verification';
+	verificationTableName = 'verification',
+	otpVerificationTableName = 'otpVerification';
 
 var userModel = {
 	createUser : function(params, callback) {
@@ -50,7 +51,7 @@ var userModel = {
 								"table" : "otpVerification",
 								"values" : {  
 									"otp"          : verification_otp,
-									"expireTime"   : moment().add(constants.OTP_EXPIRY, 'minutes').format('YYYY-MM-DD hh:mm:ss')
+									"expireTime"   : moment().add(constants.OTP_EXPIRY, 'minutes').utc().format('YYYY-MM-DD HH:mm:ss')
 								}
 							}
 							appModel.insertQueryBuilder(otpVerificationData,function(err, qry){
@@ -71,7 +72,7 @@ var userModel = {
 								"values" : {
 									"user_id"    		 : userId,
 									"otpVerification_id" : otpID,
-									"emailStartTime"     : moment().format('YYYY-MM-DD hh:mm:ss'),
+									"emailStartTime"     : moment().utc().format('YYYY-MM-DD HH:mm:ss'),
 									"authToken"          : verificationUUID
 								}
 							}
@@ -151,14 +152,41 @@ var userModel = {
 			verifyemailQuery += " LIMIT 1";
 		
 		appModel.query(verifyemailQuery, function(err, data){
-			console.log();
 			if(err) callback(err);
+			console.log(data);
+			console.log(verifyemailQuery);
 			if(data[0]['cnt'] > 0){
 				var verifedUpdateEmail = "UPDATE verification SET isEmailVerified = 'Y'"
 				   verifedUpdateEmail += " WHERE authToken = '" + authToken + "' AND user_id = " + userId;
 				   appModel.query(verifedUpdateEmail, function(err, data){
 						if(err) callback(err);
-						callback(null, "Email is verified successfully.");
+						userModel.cloneTableData(userId, function(err, data){
+							if(err) { callback(err) }
+							callback(null, "Email is verified successfully.");
+						});
+				   });
+			}else{
+				callback(null, "Token either invalid or expired.");
+			}
+		});
+	},
+
+	verifyotp : function(authToken, userId, callback){
+		var verifyOtpQuery  = "SELECT count(id) AS cnt from " + otpVerificationTableName;
+			verifyOtpQuery += " WHERE otp = '" + authToken + "' AND expireTime >= NOW()"; 
+			verifyOtpQuery += " LIMIT 1";
+			console.log(verifyOtpQuery);
+		appModel.query(verifyOtpQuery, function(err, data){
+			if(err) callback(err);
+			if(data[0]['cnt'] > 0){
+				var verifedUpdateEmail = "UPDATE verification SET isPhoneVerified = 'Y'"
+				   verifedUpdateEmail += " WHERE user_id = " + userId;
+				   appModel.query(verifedUpdateEmail, function(err, data){
+						if(err) callback(err);
+						userModel.cloneTableData(userId, function(err, data){
+							if(err) { callback(err) }
+							callback(null, "Phone is verified successfully.");
+						});
 				   });
 			}else{
 				callback(null, "Token either invalid or expired.");
@@ -175,6 +203,45 @@ var userModel = {
 			if(err) callback(err);
 			callback(null, emailResponse);
 		});
+	},
+
+	cloneTableData : function( userId, callback){
+		var cloneTableDataQuery  = "SELECT * from verification";
+			cloneTableDataQuery += " where isEmailVerified = 'Y' AND isPhoneVerified = 'Y' AND user_id =" + userId ; 
+			cloneTableDataQuery += " LIMIT 1";
+
+		appModel.query(cloneTableDataQuery, function(err, data){
+			if(err) callback(err);
+			if(data.length > 0){
+				var dataQuery = "SELECT * from temp_user where id = "+ userId;
+				appModel.query(dataQuery, function(err, data){
+					console.log(data);
+					if(err) callback(err);
+					var userData = {
+						"table" : "user",
+						"values" : {
+							"username"    : data[0].username,
+							"password"    : data[0].password,
+							"userType"    : data[0].userType,
+							"name"        : data[0].name,
+							"countryCode" : data[0].countryCode,
+							"phoneNumber" : data[0].phoneNumber,
+			                "emailId"     : data[0].emailId
+						}
+					}
+
+					appModel.insertQueryBuilder(userData,function(err, qry){
+						console.log(qry);
+						appModel.query(qry, function(err, data) {
+							if (err) { return callback(err); }
+							callback(null, data);
+						});
+					});	
+				});	
+			}else{
+				callback(null);
+			}
+		}); 
 	},
 
 	getHash: function (pass) {

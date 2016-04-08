@@ -21,6 +21,12 @@ router.post('/checkUserName', function(req, res) {
 	})
 });
 
+router.post('/verifyotp', function(req, res) {
+	userController.verifyotp(req.body.authToken, req.body.userId, function(err, response) {
+		res.send(response);
+	})
+});
+
 router.get('/verifyemail/:auth_token', function(req, res) {
 	userController.verifyemail(req.params.auth_token, function(err, response) {
 		res.send(response);

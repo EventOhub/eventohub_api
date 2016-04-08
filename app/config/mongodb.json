@@ -1,0 +1,7 @@
+{
+	"development":{
+		"host" : "ec2-52-36-42-96.us-west-2.compute.amazonaws.com",
+		"database" : "eventohub_development",
+		"port" : 27017
+	}
+}
