@@ -20,8 +20,8 @@ var user = {
 		});
 	},
 
-	verifyotp : function(authToken, userId, callback) {
-		userModel.verifyotp(authToken, userId, function(err, rows){
+	verifyOtp : function(authToken, userId, callback) {
+		userModel.verifyOtp(authToken, userId, function(err, rows){
 			if(err) callback(err);
 			appController.responsify(err, rows, function(response){
 				callback(null, response);

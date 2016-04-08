@@ -171,11 +171,10 @@ var userModel = {
 		});
 	},
 
-	verifyotp : function(authToken, userId, callback){
+	verifyOtp : function(authToken, userId, callback){
 		var verifyOtpQuery  = "SELECT count(id) AS cnt from " + otpVerificationTableName;
 			verifyOtpQuery += " WHERE otp = '" + authToken + "' AND expireTime >= NOW()"; 
 			verifyOtpQuery += " LIMIT 1";
-			console.log(verifyOtpQuery);
 		appModel.query(verifyOtpQuery, function(err, data){
 			if(err) callback(err);
 			if(data[0]['cnt'] > 0){
