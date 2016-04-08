@@ -15,6 +15,12 @@ router.post('/signin', function(req, res) {
 	})
 });
 
+router.post('/signout', function(req, res) {
+	userController.signout(req.body, function(err, response) {
+		res.send(response);
+	})
+});
+
 router.post('/checkUserName', function(req, res) {
 	userController.checkUserName(req.body.username, function(err, response) {
 		res.send(response);
@@ -22,7 +28,7 @@ router.post('/checkUserName', function(req, res) {
 });
 
 router.post('/verifyOtp', function(req, res) {
-	userController.verifyotp(req.body.authToken, req.body.userId, function(err, response) {
+	userController.verifyOtp(req.body.authToken, req.body.userId, function(err, response) {
 		res.send(response);
 	})
 });
