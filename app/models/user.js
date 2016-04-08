@@ -2,7 +2,8 @@ var appModel = require("../models/appModel.js"),
 	async   = require('async'),
 	constants = require('../lib/constants.js'),
 	email = require('../lib/email.js'),
-	sms = require('../lib/sms.js'),
+	sms     = require('../lib/sms.js'),
+	session = require('../lib/session.js'),
 	uuid = require('node-uuid'),
 	otplib = require('otplib'),
 	crypto = require('crypto'),
@@ -115,6 +116,32 @@ var userModel = {
 		});
 	},
 
+	checkUserName : function(username, callback){
+		var nonAvailableMsg = {
+			"msg" : "This Username is already taken"
+		}
+		var availableMsg = {
+			"msg" : "This Username is available"
+		}
+
+		var checkUserNameQry = "SELECT username from " + table;
+		checkUserNameQry += " where username = '" + username + "'"; 
+		appModel.query(checkUserNameQry, function(err, data){
+			if(err) callback(err);
+			
+			var checkTempUserNameQry = "SELECT username from " + table;
+			checkTempUserNameQry += " where username = '" + username + "'"; 
+			
+			appModel.query(checkUserNameQry, function(err, tempData){
+				if(err) callback(err);
+				if(data.length > 0 || tempData.length > 0)
+					callback(null, nonAvailableMsg);
+				else
+					callback(null, availableMsg);
+			});
+		});
+	},
+
 	verifyemail : function(authToken, callback){
 		var authTokenArr = authToken.split("-");
 		var userId = authTokenArr[authTokenArr.length - 1];
@@ -153,6 +180,25 @@ var userModel = {
 	getHash: function (pass) {
 		var hash = crypto.createHash('sha1').update(constants.SALT + pass).digest('hex');
 		return hash;
+	},
+
+	login : function(params, callback){
+		var loginQuery = "SELECT * from " + table;
+		loginQuery += " where username = '" + params.username + "' and password = '" + userModel.getHash(params.password) + "'"; 
+		loginQuery += " LIMIT 1";
+
+		appModel.query(loginQuery, function(err, data){
+			if (err) { return callback(err); }
+			if(data[0]['id'] === undefined){
+				callback("Username or password is invalid");
+			}else{
+				//create session with the help of session file in lib 
+				session.createSession(data[0], function(err, sessionId){
+					if(err) { callback("Error in creating session"); }
+					callback(null, sessionId);
+				});
+			}	
+		});
 	},
 }
 module.exports = userModel;

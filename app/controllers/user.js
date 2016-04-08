@@ -18,6 +18,22 @@ var user = {
 				callback(null, response);
 			})
 		});
+	},
+	login : function(params, callback) {
+		userModel.login(params, function(err, rows){
+			if(err) callback(err);
+			appController.responsify(err, rows, function(response){
+				callback(null, response);
+			})
+		});
+	},
+	checkUserName : function(username, callback) {
+		userModel.checkUserName(username, function(err, rows){
+			if(err) callback(err);
+			appController.responsify(err, rows, function(response){
+				callback(null, response);
+			})
+		});
 	}
 }
 

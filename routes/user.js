@@ -9,6 +9,18 @@ router.post('/signup', function(req, res) {
 	})
 });
 
+router.post('/signin', function(req, res) {
+	userController.login(req.body, function(err, response) {
+		res.send(response);
+	})
+});
+
+router.post('/checkUserName', function(req, res) {
+	userController.checkUserName(req.body.username, function(err, response) {
+		res.send(response);
+	})
+});
+
 router.get('/verifyemail/:auth_token', function(req, res) {
 	userController.verifyemail(req.params.auth_token, function(err, response) {
 		res.send(response);
