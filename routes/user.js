@@ -21,13 +21,13 @@ router.post('/checkUserName', function(req, res) {
 	})
 });
 
-router.post('/verifyotp', function(req, res) {
+router.post('/verifyOtp', function(req, res) {
 	userController.verifyotp(req.body.authToken, req.body.userId, function(err, response) {
 		res.send(response);
 	})
 });
 
-router.post('/verifyemail', function(req, res) {
+router.post('/verifyEmail', function(req, res) {
 	userController.verifyemail(req.body.authToken, function(err, response) {
 		res.send(response);
 	})
