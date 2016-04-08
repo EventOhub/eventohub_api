@@ -27,8 +27,8 @@ router.post('/verifyotp', function(req, res) {
 	})
 });
 
-router.get('/verifyemail/:auth_token', function(req, res) {
-	userController.verifyemail(req.params.auth_token, function(err, response) {
+router.post('/verifyemail', function(req, res) {
+	userController.verifyemail(req.body.authToken, function(err, response) {
 		res.send(response);
 	})
 });
