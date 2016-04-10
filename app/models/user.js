@@ -118,28 +118,30 @@ var userModel = {
 	},
 
 	checkUserName : function(username, callback){
-		var nonAvailableMsg = {
-			"msg" : "This Username is already taken"
-		}
-		var availableMsg = {
-			"msg" : "This Username is available"
-		}
-
-		var checkUserNameQry = "SELECT username from " + table;
-		checkUserNameQry += " where username = '" + username + "'"; 
-		appModel.query(checkUserNameQry, function(err, data){
-			if(err) callback(err);
-			
-			var checkTempUserNameQry = "SELECT username from " + table;
-			checkTempUserNameQry += " where username = '" + username + "'"; 
-			
-			appModel.query(checkUserNameQry, function(err, tempData){
-				if(err) callback(err);
-				if(data.length > 0 || tempData.length > 0)
-					callback(null, nonAvailableMsg);
-				else
-					callback(null, availableMsg);
-			});
+		var userNameAvailable = 1;
+		async.parallel([
+			function(cb){
+				var qry = "SELECT username FROM temp_user where username='" + username + "'";
+				appModel.query(qry, function(err, data){
+					if(err) cb(err);
+					if(data.length > 0) { userNameAvailable = 0; }
+					cb(null, userNameAvailable);
+				});
+			},
+			function(cb){
+				var qry = "SELECT username FROM user where username='" + username + "'";
+				appModel.query(qry, function(err, data){
+					if(err) cb(err);
+					if(data.length > 0) { userNameAvailable = 0; }
+					cb(null, userNameAvailable);
+				});
+			}
+		], function (err, result) {
+		    if (err) {
+				callback(err);
+			} else {
+				callback(null, {"userNameAvailable" : userNameAvailable});
+			}
 		});
 	},
 
@@ -153,8 +155,6 @@ var userModel = {
 		
 		appModel.query(verifyemailQuery, function(err, data){
 			if(err) callback(err);
-			console.log(data);
-			console.log(verifyemailQuery);
 			if(data[0]['cnt'] > 0){
 				var verifedUpdateEmail = "UPDATE verification SET isEmailVerified = 'Y'"
 				   verifedUpdateEmail += " WHERE authToken = '" + authToken + "' AND user_id = " + userId;
