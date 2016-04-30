@@ -28,7 +28,7 @@ var user = {
 			})
 		});
 	},
-
+    
 	login : function(params, callback) {
 		userModel.login(params, function(err, rows){
 			if(err) callback(err);

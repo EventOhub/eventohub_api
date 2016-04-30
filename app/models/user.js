@@ -109,7 +109,7 @@ var userModel = {
 	checkUser : function(username, emailId, phoneNumber, callback){
 		var checkUserQry = "SELECT username from " + table;
 		checkUserQry += " where username = '" + username + "' or phoneNumber = " + phoneNumber + " or emailId = '" + emailId + "'"; 
-        console.log(checkUserQry);
+        //console.log(checkUserQry);
 		appModel.query(checkUserQry, function(err, data){
 			if(err) callback(err);
 			console.log(data);
@@ -118,13 +118,13 @@ var userModel = {
 	},
 
 	checkUserName : function(username, callback){
-		var userNameAvailable = 1;
+		var userNameAvailable = 0;
 		async.parallel([
 			function(cb){
 				var qry = "SELECT username FROM temp_user where username='" + username + "'";
 				appModel.query(qry, function(err, data){
 					if(err) cb(err);
-					if(data.length > 0) { userNameAvailable = 0; }
+					if(data.length > 0) { userNameAvailable = 1; }
 					cb(null, userNameAvailable);
 				});
 			},
@@ -132,7 +132,7 @@ var userModel = {
 				var qry = "SELECT username FROM user where username='" + username + "'";
 				appModel.query(qry, function(err, data){
 					if(err) cb(err);
-					if(data.length > 0) { userNameAvailable = 0; }
+					if(data.length > 0) { userNameAvailable = 1; }
 					cb(null, userNameAvailable);
 				});
 			}
