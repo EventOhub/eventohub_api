@@ -10,6 +10,7 @@ var routes = require('./routes/index');
 var geolocation = require('./routes/geolocation');
 var user = require('./routes/user');
 var services = require('./routes/services');
+var artist = require('./routes/artist');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/', routes);
 app.use('/geolocation', geolocation);
 app.use('/user', user);
 app.use('/services', services);
+app.use('/artist', artist);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
