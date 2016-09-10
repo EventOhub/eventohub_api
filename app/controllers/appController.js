@@ -1,7 +1,7 @@
 'use strict';
 var controller = {
     //Common methods accesable to the controllers
-    responsify: function (err, data, res) {
+    responsify: function (err, data) {
         var response = {};
         if (err) {
             response.status = 'error';
@@ -13,7 +13,7 @@ var controller = {
         }
         //console.log('Res: ' + JSON.stringify(response));
         //console.log('record count: ' + response.json.length);
-        res(response);
+        return response;
     }
 };
 module.exports = controller;
