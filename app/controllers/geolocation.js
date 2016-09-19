@@ -4,14 +4,10 @@ var appController = require("./appController.js");
 var _ = require('underscore');
 
 var geolocation = {
-	getLocation : function(callback) {
+	getLocation : function(req, res) {
 		geolocationModel.getLocation(function(err, rows){
-			var locations = {};
-			if(err) callback(err);
-		
-			appController.responsify(err, rows, function(response){
-				callback(null, response);
-			})
+			var apiResponse = appController.responsify(err, data);
+			res(apiResponse);
 		});
 	}
 }

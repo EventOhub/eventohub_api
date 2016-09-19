@@ -150,8 +150,9 @@ var userModel = {
 		var userId = authTokenArr[authTokenArr.length - 1];
 		var verifyemailQuery  = "SELECT count(id) AS cnt from " + verificationTableName;
 			verifyemailQuery += " WHERE authToken = '" + authToken + "' AND user_id = " + userId;
-			verifyemailQuery += " AND isEmailVerified = 'N' AND emailStartTime >= DATE_SUB(NOW(), INTERVAL " + constants.EMAIL_VERFICATION_TIME + " HOUR)"; 
+			verifyemailQuery += " AND isEmailVerified = 'N' AND emailStartTime >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL " + constants.EMAIL_VERFICATION_TIME + " HOUR)"; 
 			verifyemailQuery += " LIMIT 1";
+		console.log(verifyemailQuery);	
 		
 		appModel.query(verifyemailQuery, function(err, data){
 			if(err) callback(err);
@@ -173,7 +174,7 @@ var userModel = {
 
 	verifyOtp : function(authToken, userId, callback){
 		var verifyOtpQuery  = "SELECT count(id) AS cnt from " + otpVerificationTableName;
-			verifyOtpQuery += " WHERE otp = '" + authToken + "' AND expireTime >= NOW()"; 
+			verifyOtpQuery += " WHERE otp = '" + authToken + "' AND expireTime >= UTC_TIMESTAMP()"; 
 			verifyOtpQuery += " LIMIT 1";
 		appModel.query(verifyOtpQuery, function(err, data){
 			if(err) callback(err);

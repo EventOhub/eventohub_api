@@ -4,7 +4,7 @@ var userController = require("../app/controllers/user.js")
 
 /* GET home page. */
 router.post('/signup', function(req, res) {
-	userController.createUser(req.body, function(err, response) {
+	userController.createUser(req.body, function(response) {
 		res.send(response);
 	})
 });
@@ -28,13 +28,13 @@ router.post('/checkUserName', function(req, res) {
 });
 
 router.post('/verifyOtp', function(req, res) {
-	userController.verifyOtp(req.body.authToken, req.body.userId, function(err, response) {
+	userController.verifyOtp(req.body.authToken, req.body.userId, function(response) {
 		res.send(response);
 	})
 });
 
 router.post('/verifyEmail', function(req, res) {
-	userController.verifyemail(req.body.authToken, function(err, response) {
+	userController.verifyemail(req.body.authToken, function(response) {
 		res.send(response);
 	})
 });

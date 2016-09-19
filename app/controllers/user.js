@@ -3,29 +3,26 @@ var userModel = require("../models/user.js");
 var appController = require("./appController.js");
 
 var user = {
-	createUser : function(params, callback) {
+	createUser : function(params, res) {
 		userModel.createUser(params, function(err, rows){
-			if(err) callback(err);
-			appController.responsify(err, rows, function(response){
-				callback(null, response);
-			})
+			var apiResponse = appController.responsify(err, rows);
+			console.log(apiResponse);
+			res(apiResponse);
 		});
 	},
-	verifyemail : function(authToken, callback) {
+	verifyemail : function(authToken, res) {
 		userModel.verifyemail(authToken, function(err, rows){
-			if(err) callback(err);
-			appController.responsify(err, rows, function(response){
-				callback(null, response);
-			})
+			var apiResponse = appController.responsify(err, rows);
+			console.log(apiResponse);
+			res(apiResponse);
 		});
 	},
 
-	verifyOtp : function(authToken, userId, callback) {
+	verifyOtp : function(authToken, userId, res) {
 		userModel.verifyOtp(authToken, userId, function(err, rows){
-			if(err) callback(err);
-			appController.responsify(err, rows, function(response){
-				callback(null, response);
-			})
+			var apiResponse = appController.responsify(err, rows);
+			console.log(apiResponse);
+			res(apiResponse);
 		});
 	},
     
