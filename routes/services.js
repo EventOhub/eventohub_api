@@ -4,7 +4,7 @@ var servicesController = require("../app/controllers/services.js")
 
 /* GET home page. */
 router.get('/getServices', function(req, res, next) {
-  servicesController.getServices(function(err, response) {
+  servicesController.getServices(req, function(response) {
   	res.send(response);
   })
 });
